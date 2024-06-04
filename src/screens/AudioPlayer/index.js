@@ -21,10 +21,10 @@ import {
 import Toast from 'react-native-toast-message';
 
 const tokenOne =
-  'eyJhbGciOiJIUzsasfsdfasfI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTc0NzE3ODQ0NCwid212ZXIiOjIsIndtaWRmbXQiOiJhc2NpaSIsIndtaWR0eXAiOjEsIndtaWRsZW4iOjUxMiwid21vcGlkIjozMiwid21pZCI6ImE1NWVjN2U0NTUwOSJ9.7dc5CpanZmsEHHBVSA7miu1RWm2zLrkdTwR0vWAnILw';
+  '';
 
 const tokenTwo =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTc0OTg1Njg0NCwid212ZXIiOjIsIndtaWRmbXQiOiJhc2NpaSIsIndtaWR0eXAiOjEsIndtaWRsZW4iOjUxMiwid21vcGlkIjozMiwid21pZCI6ImE1NWVjN2U0NTUwOSJ9.d6VpjKfPV1qR3Lgzty_1xbW581ua1My2KI24rHQflVY';
+  '';
 
 const AudioPlayer = ({route, navigation}) => {
   const videoRef = useRef(null);
@@ -37,7 +37,7 @@ const AudioPlayer = ({route, navigation}) => {
   const [isAlreadyDownload, setAlreadyDownload] = useState(false);
   const [currentToken, setCurrentToken] = useState(tokenTwo);
   const src =
-    'https://d2ch2o8hmxnkoe.cloudfront.net/bpk-tv/ArenaHD/default/index.m3u8';
+    '';
 
   const posterImage = route?.params?.posterImage;
   const isAudio = route.params?.isAudio || false;
@@ -98,7 +98,6 @@ const AudioPlayer = ({route, navigation}) => {
     return () => clearInterval(interval);
   }, [isPaused]);
 
-  // const src = `https://d2ch2o8hmxnkoe.cloudfront.net/${currentToken}/bpk-tv/ArenaHD/default/index.m3u8`;
 
   useEffect(() => {
     console.log('RN Updated token:🦑', currentToken);
