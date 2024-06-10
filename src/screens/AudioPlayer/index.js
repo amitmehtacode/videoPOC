@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 
 import Video from 'react-native-video';
@@ -21,10 +22,10 @@ import {
 import Toast from 'react-native-toast-message';
 
 const tokenOne =
-  '';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTc0NzE3ODQ0NCwid212ZXIiOjIsIndtaWRmbXQiOiJhc2NpaSIsIndtaWR0eXAiOjEsIndtaWRsZW4iOjUxMiwid21vcGlkIjozMiwid21pZCI6ImE1NWVjN2U0NTUwOSJ9.7dc5CpanZmsEHHBVSA7miu1RWm2zLrkdTwR0vWAnILw';
 
 const tokenTwo =
-  '';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTc0OTg1Njg0NCwid212ZXIiOjIsIndtaWRmbXQiOiJhc2NpaSIsIndtaWR0eXAiOjEsIndtaWRsZW4iOjUxMiwid21vcGlkIjozMiwid21pZCI6ImE1NWVjN2U0NTUwOSJ9.d6VpjKfPV1qR3Lgzty_1xbW581ua1My2KI24rHQflVY';
 
 const AudioPlayer = ({route, navigation}) => {
   const videoRef = useRef(null);
@@ -36,8 +37,9 @@ const AudioPlayer = ({route, navigation}) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isAlreadyDownload, setAlreadyDownload] = useState(false);
   const [currentToken, setCurrentToken] = useState(tokenTwo);
+  const [isLoading, setLoading] = useState(false);
   const src =
-    '';
+    'https://d2ch2o8hmxnkoe.cloudfront.net/bpk-tv/ArenaHD/default/index.m3u8';
 
   const posterImage = route?.params?.posterImage;
   const isAudio = route.params?.isAudio || false;
@@ -85,31 +87,31 @@ const AudioPlayer = ({route, navigation}) => {
     setCurrentTime(data.currentTime);
   };
 
+  // useEffect(() => {
+  //   let interval = '';
+  //   if (!isPaused) {
+  //     interval = setInterval(() => {
+  //       setCurrentToken(prevToken =>
+  //         prevToken === tokenOne ? tokenTwo : tokenOne,
+  //       );
+  //     }, 30000);
+  //   }
+
+  //   return () => clearInterval(interval);
+  // }, [isPaused]);
+
+  // const src = `https://d2ch2o8hmxnkoe.cloudfront.net/${currentToken}/bpk-tv/ArenaHD/default/index.m3u8`;
+
   useEffect(() => {
-    let interval = '';
-    if (!isPaused) {
-      interval = setInterval(() => {
-        setCurrentToken(prevToken =>
-          prevToken === tokenOne ? tokenTwo : tokenOne,
-        );
-      }, 10000);
-    }
-
-    return () => clearInterval(interval);
-  }, [isPaused]);
-
-
-  useEffect(() => {
-    console.log('RN Updated token:🦑', currentToken);
-
-    videoRef.current.setNativeProps({
-      source: {
-        uri: src,
-        headers: {
-          Authorization: `Bearer ${currentToken}`,
-        },
-      },
-    });
+    console.log('RN Updated token:🦑', src);
+    // videoRef.current.setNativeProps({
+    //   source: {
+    //     uri: src,
+    //     headers: {
+    //       Authorization: `Bearer ${currentToken}`,
+    //     },
+    //   },
+    // });
   }, [currentToken]);
 
   const togglePlay = () => {
@@ -155,6 +157,11 @@ const AudioPlayer = ({route, navigation}) => {
 
   const onBuffer = val => {
     console.log('onBuffer----', val);
+    if (val?.isBuffering) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
   };
 
   return (
@@ -179,22 +186,45 @@ const AudioPlayer = ({route, navigation}) => {
         ignoreSilentSwitch={'ignore'}
         playWhenInactive={true}
         progressUpdateInterval={500}
-        bufferConfig={{
-          minBufferMs: 1000,
-          maxBufferMs: 2000,
-          bufferForPlaybackMs: 2000,
-          bufferForPlaybackAfterRebufferMs: 2000,
-        }}
+        bufferConfig={
+          {
+            //       minBufferMs?: number;
+            // maxBufferMs?: number;
+            // bufferForPlaybackMs?: number;
+            // bufferForPlaybackAfterRebufferMs?: number;
+            // backBufferDurationMs?: number;
+            // maxHeapAllocationPercent?: number;
+            // minBackBufferMemoryReservePercent?: number;
+            // minBufferMemoryReservePercent?: number;
+            // cacheSizeMB?: number;
+            // live?: BufferConfigLive;
+          }
+        }
         preferredForwardBufferDuration={2000}
         playInBackground={true}
         onError={onError}
       />
+
       <LinearGradient
         colors={['#000000', '#0000000F', '#000000', '#000000', '#0000000F']}
         start={{x: 0, y: 0.06}}
         end={{x: 0, y: 1.4}}
         style={styles.controlsContainer}
       />
+
+      {isLoading ? (
+        <View
+          style={{
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            position: 'absolute',
+            justifyContent: 'center',
+          }}>
+          <ActivityIndicator size={'large'} color={'#01A8C5'} animating />
+        </View>
+      ) : null}
 
       <TouchableOpacity
         onPress={() => navigation.goBack()}
